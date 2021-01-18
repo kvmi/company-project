@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
-    <title>Update User</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
+    <title>User details</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -22,20 +23,20 @@
         </div>
     </div>
 </nav>
-<div>
-    <h1> Update Page</h1>
-    <hr>
-    <form th:action="@{/register}" th:object = "${user}" method="POST">
-        <input type="hidden" th:field="*{id}" />
-        <input type="text" th:field = "*{username}" class="form-control mb-4 col-4">
-        <input type="password" th:field = "*{password}" class="form-control mb-4 col-4">
-        <input type="text" th:field = "*{firstName}" class="form-control mb-4 col-4">
-        <input type="text" th:field = "*{lastName}" class="form-control mb-4 col-4">
-        <input type="text" th:field = "*{email}" class="form-control mb-4 col-4">
-        <input type="hidden" th:field="*{company}" />
-        <input type="date" th:field = "*{dateOfEmployment}" class="form-control mb-4 col-4">
-        <button type="submit" class="btn btn-info col-2"> Update </button>
-    </form>
-</div>
+
+<a th:href="@{/edit/{id}(id=${user.id})}" class="btn btn-primary">Update</a>
+<a th:href="@{/user/delete/{id}(id=${user.id})}" class="btn btn-danger">Delete</a>
+
+<h1>User details:</h1>
+
+<br/>
+<p>First name: <span th:text="${user.firstName}"></span></p>
+<p>Last name: <span th:text="${user.lastName}"></span></p>
+<p>Username: <span th:text="${user.username}"></span></p>
+<p>Date of employment: <span th:text="${user.dateOfEmployment}"></span> </p>
+<p>Companies: </p>
+<ul th:each="company : ${user.company}">
+    <li th:text="${company.companyName}"></li>
+</ul>
 </body>
 </html>

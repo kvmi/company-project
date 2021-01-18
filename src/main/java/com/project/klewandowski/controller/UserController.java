@@ -1,27 +1,22 @@
 package com.project.klewandowski.controller;
 
 
-import com.project.klewandowski.domain.Company;
 import com.project.klewandowski.domain.User;
 import com.project.klewandowski.service.CompanyService;
 import com.project.klewandowski.service.UserService;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Collections;
-import java.util.HashSet;
+import java.security.Principal;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 @CrossOrigin
@@ -40,27 +35,22 @@ public class UserController {
     }
 
     @GetMapping("/user/main")
+    public String viewUserHomePage(Model model, Principal principal) {
+        User user = userService.getUserByUsername(principal.getName());
+        model.addAttribute("user", user);
+        return "user_details";
+    }
+
+    @GetMapping("/admin/users")
     public String viewHomePage(Model model) {
-        model.addAttribute("userList", userService.getAllUsers());
-        return "index";
+
+        return findPaginated(1, model);
+//        model.addAttribute("userList", userService.getAllUsers());
+//        return "index";
     }
 
 
-    @GetMapping("/api/persons")
-    public ResponseEntity<List<User>> getUsers() {
 
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
-    }
-
-    @GetMapping("/api/persons/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
-    }
-
-    @GetMapping("/api/persons/company/{company}")
-    public ResponseEntity<List<User>> getUsersByCompany(@PathVariable String company) {
-        return new ResponseEntity<>(userService.getUsersByCompany(company), HttpStatus.OK);
-    }
     @RequestMapping("/addUser")
     public ModelAndView addUserByAdmin() {
         return new ModelAndView("new_user", "user", new User());
@@ -71,22 +61,10 @@ public class UserController {
         return new ModelAndView("register", "user", new User());
     }
 
-    @RequestMapping(value="/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ModelAndView saveUser(User user) {
-//        Company company = new Company();
-//        company.setCompanyName("brak");
-//        company.setCompanyPresident(new User());
-//        User user1 = new User();
-//        User user2 = new User();
-//        Set<User> userSet = Stream.of(user1, user2).collect(Collectors.toCollection(HashSet::new));
-//        company.setUsers(userSet);
-//        Set<Company> companySet = Stream.of(company).collect(Collectors.toCollection(HashSet::new));
-//        user.setCompanies(companySet);
-//        company = companyService.addCompany(company);
-//        user.setCompany((Set<Company>) company);
         userService.addUser(user);
-        System.out.println("es");
-        return new ModelAndView("redirect:/login");
+        return new ModelAndView("redirect:/main");
     }
 
 
@@ -97,31 +75,53 @@ public class UserController {
 //    }
 
     @GetMapping("/edit/{id}")
-    public String editPerson(@PathVariable ( value = "id") long id, Model model) {
+    public String editUser(@PathVariable(value = "id") long id, Model model) {
         User user = userService.getUserById(id);
         model.addAttribute("user", user);
         return "update_person";
     }
 
+    @GetMapping("/user/manage/{id}")
+    public String manageUser(@PathVariable(value = "id") long id, Model model) {
+        User user = userService.getUserById(id);
+        model.addAttribute("user", user);
+        return "user_details";
+    }
+
     @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable (value = "id") long id){
+    public String deleteUser(@PathVariable(value = "id") long id) {
         this.userService.deleteUser(id);
-        return "redirect:/";
+        return "redirect:/user/main";
     }
 
-    @DeleteMapping("/api/persons/{id}")
-    public ResponseEntity deletePerson(@PathVariable long id) {
-        userService.deleteUser(id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    @GetMapping("/user/delete/{id}")
+    public String deleteAcc(@PathVariable(value = "id") long id) {
+        this.userService.deleteUser(id);
+        return "redirect:/login";
     }
 
-    @GetMapping("/api/company/names")
-    public ResponseEntity<List<String>> getCompanyNames() {
-        return new ResponseEntity<>(userService.getCompanyNames(), HttpStatus.OK);
-    }
+
 
     @GetMapping("/login")
-    public String login(){
+    public String login() {
         return "login";
+    }
+
+    @GetMapping("/user/page/{pageNo}")
+    public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model) {
+        int pageSize = 5;
+        Page<User> page = userService.findPaginated(pageNo, pageSize);
+        List<User> userList = page.getContent();
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("userList", userList);
+        return "index";
+    }
+
+    @GetMapping("/main")
+    public String main() {
+        return "main";
     }
 }

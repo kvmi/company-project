@@ -3,6 +3,7 @@ package com.project.klewandowski.service;
 
 import com.project.klewandowski.domain.Company;
 import com.project.klewandowski.domain.User;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -27,5 +28,9 @@ public interface UserService extends UserDetailsService {
     List<String> getCompanyNames();
 
     UserDetails loadUserByUsername(String username);
+
+    Page<User> findPaginated(int pageNo, int pageSize);
+
+    User getUserByUsername(String username);
 
 }

@@ -1,8 +1,12 @@
 package com.project.klewandowski.service;
 
 import com.project.klewandowski.domain.Company;
+import com.project.klewandowski.domain.User;
 import com.project.klewandowski.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,8 +41,8 @@ public class CompanyServiceImpl implements CompanyService {
 
 
     @Override
-    public void deleteCompany(String companyName) {
-        companyRepository.deleteByCompanyName(companyName);
+    public void deleteCompany(long id) {
+        companyRepository.deleteById(id);
     }
 
     @Override
@@ -53,6 +57,17 @@ public class CompanyServiceImpl implements CompanyService {
     public Company getCompanyByName(String companyName) {
 
         return companyRepository.findAllByCompanyName(companyName);
+    }
+
+    @Override
+    public Page<Company> findPaginatedCom(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        return this.companyRepository.findAll(pageable);
+    }
+
+    @Override
+    public Company getCompanyById(long id) {
+        return companyRepository.findById(id).orElse(null);
     }
 
 }

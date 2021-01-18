@@ -25,24 +25,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
-//        auth.inMemoryAuthentication()
-//                .withUser("admin").password(passwordEncoder.encode("admin")).authorities("ROLE_USER", "ROLE_ADMIN")
-//                .and()
-//                .withUser("user").password(passwordEncoder.encode("user")).authorities("ROLE_USER");
+        auth.inMemoryAuthentication()
+                .withUser("admin").password(passwordEncoder.encode("admin")).authorities("ROLE_ADMIN")
+                .and()
+                .withUser("user").password(passwordEncoder.encode("user")).authorities("ROLE_USER");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/signup").permitAll()
                 .antMatchers("/register").permitAll()
-                .antMatchers("/addUser").hasAnyRole("ADMIN")
+//                .antMatchers("/addUser").hasAnyRole("ADMIN")
 //                .antMatchers("/**").authenticated()
                 .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/company/**").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/main/**").hasAnyRole("ADMIN", "USER")
                 .and()
-                .formLogin().defaultSuccessUrl("/user/main").permitAll()
-                .and()
-                .formLogin()
-                .loginPage("/login")
+                .formLogin().loginPage("/login").defaultSuccessUrl("/main")
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
 

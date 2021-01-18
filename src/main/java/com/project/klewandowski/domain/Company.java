@@ -1,6 +1,8 @@
 package com.project.klewandowski.domain;
 
 
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -17,7 +19,7 @@ public class Company {
     private String companyName;
 
     @ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
+    @JoinColumn(name="user_id")
     private User companyPresident;
 
 
