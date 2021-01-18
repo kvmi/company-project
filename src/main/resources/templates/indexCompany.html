@@ -48,8 +48,8 @@
         <tr th:each="company : ${companyList}">
             <td th:text="${company.companyName}"></td>
             <td th:text="${company.companyPresident.firstName} + ' ' + ${company.companyPresident.lastName}"></td>
-            <td> <a th:href="@{/edit/{id}(id=${company.id})}" class="btn btn-primary">Update</a>
-                <a  th:href="@{/delete/{id}(id=${company.id})}" class="btn btn-danger">Delete</a>
+            <td> <a th:href="@{company/edit/{id}(id=${company.id})}" class="btn btn-primary">Update</a>
+                <a  th:href="@{company/delete/{id}(id=${company.id})}" class="btn btn-danger">Delete</a>
             </td>
         </tr>
         </tbody>
