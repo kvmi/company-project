@@ -53,7 +53,7 @@ public class CompanyController {
         return new ModelAndView("redirect:/company/main");
     }
 
-    @GetMapping("/company/edit/{id}")
+    @GetMapping("/company/company/edit/{id}")
     public String editCompany(@PathVariable(value = "id") long id, Model model) {
         Company company = companyService.getCompanyById(id);
         model.addAttribute("company", company);
@@ -66,7 +66,7 @@ public class CompanyController {
         return new ModelAndView("redirect:/main");
     }
 
-    @GetMapping("/company/delete/{id}")
+    @GetMapping("/company/company/delete/{id}")
     public String deleteCompany(@PathVariable(value = "id") long id) {
         companyService.deleteCompany(id);
         return "redirect:/main";
