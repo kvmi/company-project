@@ -63,13 +63,13 @@ public class CompanyController {
     @RequestMapping(value = "/register/company", method = RequestMethod.POST)
     public ModelAndView saveCompany(Company company) {
         companyService.addCompany(company);
-        return new ModelAndView("redirect:/main");
+        return new ModelAndView("redirect:/company/main");
     }
 
     @GetMapping("/company/company/delete/{id}")
     public String deleteCompany(@PathVariable(value = "id") long id) {
         companyService.deleteCompany(id);
-        return "redirect:/main";
+        return "redirect:/company/main";
     }
 
 

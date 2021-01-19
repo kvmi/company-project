@@ -16,7 +16,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link active" th:href="@{/user/main}">Home<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link active" th:href="@{/main}">Home<span class="sr-only">(current)</span></a>
             <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="nav-item nav-link" th:href="@{/admin/users}">User management</a>
             <a th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}" class="nav-item nav-link"  th:href="@{/user/main}">Account details</a>
             <a class="nav-item nav-link"  th:href="@{/company/main}">Companies</a>
@@ -62,7 +62,7 @@
             <div class = "col-sm-1">
                 <span th:each="i: ${#numbers.sequence(1, totalPages)}">
                     <a th:if="${currentPage != i}" th:href="@{'/company/page/' + ${i}}">[[${i}]]</a>
-                    <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp; &nbsp;
+                    <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;;
                 </span>
             </div>
             <div class = "col-sm-1">

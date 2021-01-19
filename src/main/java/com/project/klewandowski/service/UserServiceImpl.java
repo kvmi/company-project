@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
         this.companyRepository = companyRepository;
         this.passwordEncoder = passwordEncoder;
 
-        loadPersonCSV();
+//        loadPersonCSV();
     }
 
     @Override
@@ -125,47 +125,47 @@ public class UserServiceImpl implements UserService {
         return firstName.matches("/^[\\s\\p{L}]+$/u");
     }
 
-    private void loadPersonCSV() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
-
-        try {
-
-            // Create an object of filereader
-            // class with CSV file as a parameter.
-            FileReader filereader = new FileReader("D:\\Git\\projekt\\src\\main\\java\\com\\lewandowski\\springproject\\service\\Data.csv");
-
-            // create csvReader object passing
-            // file reader as a parameter
-            CSVReader csvReader = new CSVReader(filereader);
-            String[] nextRecord;
-            csvReader.readNext();
-
-            // we are going to read data line by line
-            while ((nextRecord = csvReader.readNext()) != null) {
-                Company company = new Company();
-                company.setId(Long.parseLong(nextRecord[0]));
-                company.setCompanyName(nextRecord[4]);
-                company.setCompanyPresident(null);
-                companyRepository.save(company);
-
-                User user = new User();
-                user.setId(Long.parseLong(nextRecord[0]));
-                user.setFirstName(nextRecord[1]);
-                user.setLastName(nextRecord[2]);
-                user.setEmail(nextRecord[3]);
-                user.setDateOfEmployment(LocalDate.parse(nextRecord[5], formatter));
-                Set<Company> companySet = new HashSet<>();
-                companySet.add(company);
-                user.setCompany(companySet);
-                user.setUsername(user.getFirstName());
-                user.setPassword(user.getLastName());
-
-                userRepository.save(user);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private void loadPersonCSV() {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+//
+//        try {
+//
+//            // Create an object of filereader
+//            // class with CSV file as a parameter.
+//            FileReader filereader = new FileReader("D:\\Git\\projekt\\src\\main\\java\\com\\lewandowski\\springproject\\service\\Data.csv");
+//
+//            // create csvReader object passing
+//            // file reader as a parameter
+//            CSVReader csvReader = new CSVReader(filereader);
+//            String[] nextRecord;
+//            csvReader.readNext();
+//
+//            // we are going to read data line by line
+//            while ((nextRecord = csvReader.readNext()) != null) {
+//                Company company = new Company();
+//                company.setId(Long.parseLong(nextRecord[0]));
+//                company.setCompanyName(nextRecord[4]);
+//                company.setCompanyPresident(null);
+//                companyRepository.save(company);
+//
+//                User user = new User();
+//                user.setId(Long.parseLong(nextRecord[0]));
+//                user.setFirstName(nextRecord[1]);
+//                user.setLastName(nextRecord[2]);
+//                user.setEmail(nextRecord[3]);
+//                user.setDateOfEmployment(LocalDate.parse(nextRecord[5], formatter));
+//                Set<Company> companySet = new HashSet<>();
+//                companySet.add(company);
+//                user.setCompany(companySet);
+//                user.setUsername(user.getFirstName());
+//                user.setPassword(user.getLastName());
+//
+//                userRepository.save(user);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 }
